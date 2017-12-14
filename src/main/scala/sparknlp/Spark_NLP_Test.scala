@@ -1,10 +1,12 @@
-import org.apache.spark.ml.{Pipeline, PipelineModel, PipelineStage}
+package sparknlp
+
 import com.johnsnowlabs.nlp._
 import com.johnsnowlabs.nlp.annotators._
-import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
+import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
+import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.StopWordsRemover
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.SparkSession
 
 
 object Spark_NLP_Test {
