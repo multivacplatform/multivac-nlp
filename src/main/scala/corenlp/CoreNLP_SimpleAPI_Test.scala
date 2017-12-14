@@ -24,9 +24,18 @@ object CoreNLP_SimpleAPI_Test {
         In a rapidly changing world, those tools are constantly changing, requiring that the techniques to use them be continuously reinvented. The history of Japan is somewhat unusual in its relative isolation. Compared with the rest of the world, the Japanese tools of war evolved slowly. Many people believe that this afforded the warrior class the opportunity to study their weapons with greater depth than other cultures. Nevertheless, the teaching and training of these martial arts did evolve. For example, in the early medieval period, the bow and the spear were emphasized, but during the Tokugawa period, fewer large scale battles took place, and the sword became the most prestigious weapon. Another trend that developed throughout Japanese history was that of increasing martial specialization as society became more stratified over time.
       """.stripMargin
 
+    val wordsArray = new Sentence(document)
+      .words()
+      .asScala
+      .zipWithIndex
+      .map{case (k,v) => (v,k)}
 
-    val wordsArray = new Sentence(document).words().asScala.zipWithIndex.map{case (k,v) => (v,k)}
-    val postArray = new Sentence(document).posTags().asScala.zipWithIndex.map{case (k,v) => (v,k)}
+    val postArray = new Sentence(document)
+      .posTags()
+      .asScala
+      .zipWithIndex
+      .map{case (k,v) => (v,k)}
+
     for (e <- postArray){
       wordsWithPosLabels +=  wordsArray.find(_._1 == e._1).get._2 + "_" + e._2 + " "
     }
