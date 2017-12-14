@@ -11,7 +11,6 @@ object CoreNLP_UDF extends Serializable {
   def textCleaning(s:String): String={
     var st=s
     st =st.replaceAll("[\\`\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\-\\+\\=\\-\\{\\}\\[\\]\\;\\:\\'\\\"\\<\\>\\,\\.\\/\\?]", "")
-    //println(s+"\t"+st)
     st
   }
 }
