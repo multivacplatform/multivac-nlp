@@ -1,3 +1,4 @@
+import corenlp.CoreNLP_SimpleAPI_Test
 import sparknlp.Spark_NLP_Test
 
 object Main {
@@ -5,7 +6,8 @@ object Main {
     val env =args(0)
     val spark = SessionBuilder.buildSession(env)
 
-    Spark_NLP_Test.run(spark)
 
+    CoreNLP_SimpleAPI_Test.test()
+    Spark_NLP_Test.test(spark)
   }
 }
