@@ -73,7 +73,7 @@ object Spark_NLP_Test {
 
     pipeLineDF.printSchema()
 
-    pipeLineDF.select("token")show(20, false)
+    pipeLineDF.select("token.result", "pos.result")show(20, false)
 
     spark.close()
   }
