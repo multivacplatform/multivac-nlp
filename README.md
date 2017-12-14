@@ -8,8 +8,8 @@ latest version: [https://github.com/JohnSnowLabs/spark-nlp]()
 CoreNLP 3.7: [https://github.com/stanfordnlp/CoreNLP]()
 
 ## Environment
-### Spark 2.2 Local / IntelliJ
-### Cloudera CDH 5.13 / YARN (cluster - client)
+* Spark 2.2 Local / IntelliJ
+* Cloudera CDH 5.13 / YARN (cluster - client)
 
 ## Code of Conduct
 
