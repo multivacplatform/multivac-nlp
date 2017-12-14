@@ -10,7 +10,7 @@ import org.apache.spark.sql.SparkSession
 
 
 object Spark_NLP_Test {
-  def run(spark: SparkSession): Unit ={
+  def test(spark: SparkSession): Unit ={
 
     println("Spark Version", spark.version)
 
