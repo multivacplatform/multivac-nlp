@@ -2,7 +2,7 @@ import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
 import com.johnsnowlabs.nlp.annotators.{Normalizer, RegexTokenizer, Stemmer}
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
-import corenlp_simple.SimpleAPITokenizer
+import corenlp_simple.{SimplePosTagger, SimpleTokenizer}
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.StopWordsRemover
 import org.apache.spark.sql.SparkSession
@@ -57,9 +57,13 @@ object Test_NLP_Libraries {
       .setCleanAnnotations(false)
 
     //CoreNLP functions
-    val corenlp_tokenizer = new SimpleAPITokenizer()
+    val corenlp_tokenizer = new SimpleTokenizer()
       .setInputCol("title")
       .setOutputCol("corenlp_tokens")
+
+    val corenlp_pos = new SimplePosTagger()
+      .setInputCol("title")
+      .setOutputCol("corenlp_pos")
 
     val pipeline = new Pipeline()
       .setStages(Array(
@@ -67,6 +71,7 @@ object Test_NLP_Libraries {
         sentenceDetector,
         regexTokenizer,
         corenlp_tokenizer,
+        corenlp_pos,
         normalizer,
         stemmer,
         posTagger,
@@ -78,7 +83,7 @@ object Test_NLP_Libraries {
       .transform(newsDF)
 
     pipeLineDF.printSchema()
-    pipeLineDF.select("token.result", "corenlp_tokens")show(20, false)
+    pipeLineDF.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")show(20, false)
 
     spark.close()
   }
