@@ -4,10 +4,10 @@ import org.apache.spark.ml.UnaryTransformer
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.types.{ArrayType, DataType, StringType}
 
-class SimpleAPITokenizer(override val uid: String)
-  extends UnaryTransformer[String, Seq[String], SimpleAPITokenizer]  {
+class SimpleTokenizer(override val uid: String)
+  extends UnaryTransformer[String, Seq[String], SimpleTokenizer]  {
 
-  def this() = this(Identifiable.randomUID("CoreNLPTokenizer"))
+  def this() = this(Identifiable.randomUID("SimpleTokenizer"))
 
   override protected def createTransformFunc: String => Seq[String] = {
     SimpleAPI_Functions.getWords _
