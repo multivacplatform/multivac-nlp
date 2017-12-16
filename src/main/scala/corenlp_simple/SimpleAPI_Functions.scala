@@ -5,6 +5,14 @@ import edu.stanford.nlp.simple._
 
 object SimpleAPI_Functions extends Serializable {
   def getWords(document: String): Seq[String] = {
-    new Sentence(document).words().asScala
+    new Sentence(document)
+      .words()
+      .asScala
+  }
+
+  def getPOS(document: String): Seq[String] = {
+    new Sentence(document)
+      .posTags()
+      .asScala
   }
 }
