@@ -83,7 +83,9 @@ object Test_NLP_Libraries {
       .transform(newsDF)
 
     pipeLineDF.printSchema()
-    pipeLineDF.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")show(20, false)
+    pipeLineDF
+      .select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
+      .show(20, false)
 
     spark.close()
   }
