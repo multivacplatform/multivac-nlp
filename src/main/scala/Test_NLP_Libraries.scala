@@ -18,7 +18,7 @@ object Test_NLP_Libraries {
     val newsDF = df
       .select("id", "title")
       .filter("id IS NOT NULL AND title IS NOT NULL")
-    
+
     newsDF.count()
 
     //spark-nlp functions
@@ -87,7 +87,8 @@ object Test_NLP_Libraries {
 
     pipeLineDF.printSchema()
     pipeLineDF
-      .select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
+        .select("finished_token")
+//      .select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, false)
 
     spark.close()
