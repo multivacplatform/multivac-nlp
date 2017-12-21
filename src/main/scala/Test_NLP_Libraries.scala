@@ -15,7 +15,10 @@ object Test_NLP_Libraries {
 
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
 
-    val newsDF = df.select("id", "title").filter("id IS NOT NULL AND title IS NOT NULL")
+    val newsDF = df
+      .select("id", "title")
+      .filter("id IS NOT NULL AND title IS NOT NULL")
+    
     newsDF.count()
 
     //spark-nlp functions
