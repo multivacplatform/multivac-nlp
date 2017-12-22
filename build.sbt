@@ -2,7 +2,7 @@ name := "multivac-nlp"
 
 version := "0.1"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.12"
 
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
