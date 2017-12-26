@@ -9,7 +9,7 @@ object SessionBuilder {
       sparkMaster = ConfigFactory.load().getString("spark.prod.master.value")
 
     val spark: SparkSession = SparkSession.builder
-      .appName("Multivac LDAP")
+      .appName("multivac-nlp")
       .master(sparkMaster)
       .enableHiveSupport()
       .getOrCreate
