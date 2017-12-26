@@ -16,7 +16,6 @@ object Test_NLP_Libraries {
 
     import spark.implicits._
 
-
     val inputFile="src/main/resources/enwikinews.json"
 
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
@@ -102,14 +101,24 @@ object Test_NLP_Libraries {
       //.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, truncate = false)
 
+
     val tokensDF = pipeLineDF
-      .select(explode($"filtered").as("value"))
+      .select(explode($"tokens_array").as("value")) //tokens without stop words
       .groupBy("value")
       .count
-    //unique tokens
+
     println("number of unique tokens:", tokensDF.count())
     println("display top 100 tokens:")
-    tokensDF.sort($"count".desc).show(100, truncate = false)
+    tokensDF.sort($"count".desc).show(20, truncate = false)
+
+    val filtteredTokensDF = pipeLineDF
+      .select(explode($"filtered").as("value")) //tokens after stop words
+      .groupBy("value")
+      .count
+
+    println("number of unique tokens after stop words:", filtteredTokensDF.count())
+    println("display top 100 filtered tokens:")
+    filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
     spark.close()
   }
