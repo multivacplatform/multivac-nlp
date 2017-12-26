@@ -34,30 +34,31 @@ object Test_NLP_Libraries {
       .setInputCols(Array("sentence"))
       .setOutputCol("token")
 
-    val stopwords = spark.read.textFile("src/main/resources/stopwords_en.txt").collect()
-    val filteredTokens = new StopWordsRemover()
-      .setStopWords(stopwords)
-      .setCaseSensitive(false)
-      .setInputCol("token")
-      .setOutputCol("filtered")
+//    val stopwords = spark.read.textFile("src/main/resources/stopwords_en.txt").collect()
+//    val filteredTokens = new StopWordsRemover()
+//      .setStopWords(stopwords)
+//      .setCaseSensitive(false)
+//      .setInputCol("token")
+//      .setOutputCol("filtered")
 
     val normalizer = new Normalizer()
       .setInputCols(Array("token"))
       .setOutputCol("normalized")
 
     val stemmer = new Stemmer()
-      .setInputCols(Array("token"))
+      .setInputCols(Array("normalized"))
       .setOutputCol("stem")
 
     val posTagger = new PerceptronApproach()
       .setCorpusPath("src/main/resources/anc-pos-corpus")
-      .setNIterations(20)
+      .setNIterations(5)
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
 
     val finisher = new Finisher()
       .setInputCols("token")
-      .setCleanAnnotations(false)
+      .setCleanAnnotations(true)
+      .setOutputAsArray(true)
 
     //CoreNLP functions
     val corenlp_tokenizer = new SimpleTokenizer()
@@ -87,7 +88,7 @@ object Test_NLP_Libraries {
 
     pipeLineDF.printSchema()
     pipeLineDF
-        .select("finished_token")
+        .select("title", "finished_token")
 //      .select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, false)
 
