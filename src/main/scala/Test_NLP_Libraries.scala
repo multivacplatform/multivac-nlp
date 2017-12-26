@@ -4,8 +4,10 @@ import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
 import corenlp_simple.{SimplePosTagger, SimpleTokenizer}
 import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.feature.StopWordsRemover
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.feature.{StopWordsRemover, Word2Vec}
+import org.apache.spark.ml.linalg.Vector
+
+import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
 
 
@@ -23,6 +25,8 @@ object Test_NLP_Libraries {
     val newsDF = df
       .select("id", "title")
       .filter("id IS NOT NULL AND title IS NOT NULL")
+
+    newsDF.cache()
 
     println("WikiNews Number of articles: ", newsDF.count())
 
@@ -75,6 +79,13 @@ object Test_NLP_Libraries {
       .setInputCol("title")
       .setOutputCol("corenlp_pos")
 
+    //Spark ML
+    val word2Vec = new Word2Vec()
+      .setInputCol("tokens_array")
+      .setOutputCol("word2vec")
+      .setVectorSize(3)
+      .setMinCount(0)
+
     val pipeline = new Pipeline()
       .setStages(Array(
         documentAssembler,
@@ -86,6 +97,7 @@ object Test_NLP_Libraries {
         corenlp_pos,
         //posTagger,
         token_finisher,
+        word2Vec,
         filteredTokens
       ))
 
@@ -119,6 +131,8 @@ object Test_NLP_Libraries {
     println("number of unique tokens after stop words:", filtteredTokensDF.count())
     println("display top 100 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
+
+    pipeLineDF.select("word2vec").show(50, truncate = false)
 
     spark.close()
   }
