@@ -62,7 +62,7 @@ object Test_NLP_Libraries {
       .setCleanAnnotations(true)
       .setOutputAsArray(true)
 
-    val stopwords = spark.read.textFile("src/main/resources/stopwords_en.txt").collect()
+    val stopwords = spark.read.textFile("src/main/resources/stopwords_common_words_en.txt").collect()
     val filteredTokens = new StopWordsRemover()
       .setStopWords(stopwords)
       .setCaseSensitive(false)
