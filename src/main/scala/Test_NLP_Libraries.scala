@@ -6,10 +6,16 @@ import corenlp_simple.{SimplePosTagger, SimpleTokenizer}
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.StopWordsRemover
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
+
+
 
 object Test_NLP_Libraries {
 
   def Test_EnWiki(spark: SparkSession): Unit ={
+
+    import spark.implicits._
+
 
     val inputFile="src/main/resources/enwikinews.json"
 
@@ -34,12 +40,7 @@ object Test_NLP_Libraries {
       .setInputCols(Array("sentence"))
       .setOutputCol("token")
 
-//    val stopwords = spark.read.textFile("src/main/resources/stopwords_en.txt").collect()
-//    val filteredTokens = new StopWordsRemover()
-//      .setStopWords(stopwords)
-//      .setCaseSensitive(false)
-//      .setInputCol("token")
-//      .setOutputCol("filtered")
+
 
     val normalizer = new Normalizer()
       .setInputCols(Array("token"))
@@ -55,10 +56,18 @@ object Test_NLP_Libraries {
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
 
-    val finisher = new Finisher()
-      .setInputCols("token")
+    val token_finisher = new Finisher()
+      .setInputCols("stem")
+      .setOutputCols("tokens_array")
       .setCleanAnnotations(true)
       .setOutputAsArray(true)
+
+    val stopwords = spark.read.textFile("src/main/resources/stopwords_en.txt").collect()
+    val filteredTokens = new StopWordsRemover()
+      .setStopWords(stopwords)
+      .setCaseSensitive(false)
+      .setInputCol("tokens_array")
+      .setOutputCol("filtered")
 
     //CoreNLP functions
     val corenlp_tokenizer = new SimpleTokenizer()
@@ -74,12 +83,13 @@ object Test_NLP_Libraries {
         documentAssembler,
         sentenceDetector,
         regexTokenizer,
-        corenlp_tokenizer,
-        corenlp_pos,
         normalizer,
         stemmer,
-        posTagger,
-        finisher
+        corenlp_tokenizer,
+        corenlp_pos,
+        //        posTagger,
+        token_finisher,
+        filteredTokens
       ))
 
     val pipeLineDF = pipeline
@@ -88,9 +98,19 @@ object Test_NLP_Libraries {
 
     pipeLineDF.printSchema()
     pipeLineDF
-        .select("title", "finished_token")
-//      .select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
-      .show(20, false)
+      .select("title", "filtered")
+      //      .select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
+      .show(20, truncate = false)
+
+    val tokensDF = pipeLineDF
+      .select(explode($"filtered").as("value"))
+      .groupBy("value")
+      .count
+    //unique tokens
+    println("number of unique tokens:")
+    tokensDF.count()
+    println("display top 500 tokens:")
+    tokensDF.sort($"count".desc).show(500, truncate = false)
 
     spark.close()
   }
