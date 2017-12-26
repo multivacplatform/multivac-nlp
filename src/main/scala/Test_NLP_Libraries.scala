@@ -25,7 +25,7 @@ object Test_NLP_Libraries {
       .select("id", "title")
       .filter("id IS NOT NULL AND title IS NOT NULL")
 
-    newsDF.count()
+    println("WikiNews Number of articles: ", newsDF.count())
 
     //spark-nlp functions
     val documentAssembler = new DocumentAssembler()
@@ -39,8 +39,6 @@ object Test_NLP_Libraries {
     val regexTokenizer = new RegexTokenizer()
       .setInputCols(Array("sentence"))
       .setOutputCol("token")
-
-
 
     val normalizer = new Normalizer()
       .setInputCols(Array("token"))
@@ -87,7 +85,7 @@ object Test_NLP_Libraries {
         stemmer,
         corenlp_tokenizer,
         corenlp_pos,
-        //        posTagger,
+        //posTagger,
         token_finisher,
         filteredTokens
       ))
@@ -96,10 +94,12 @@ object Test_NLP_Libraries {
       .fit(newsDF)
       .transform(newsDF)
 
+    println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
+
     pipeLineDF
       .select("title", "filtered")
-      //      .select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
+      //.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, truncate = false)
 
     val tokensDF = pipeLineDF
@@ -107,10 +107,9 @@ object Test_NLP_Libraries {
       .groupBy("value")
       .count
     //unique tokens
-    println("number of unique tokens:")
-    tokensDF.count()
-    println("display top 500 tokens:")
-    tokensDF.sort($"count".desc).show(500, truncate = false)
+    println("number of unique tokens:", tokensDF.count())
+    println("display top 100 tokens:")
+    tokensDF.sort($"count".desc).show(100, truncate = false)
 
     spark.close()
   }
