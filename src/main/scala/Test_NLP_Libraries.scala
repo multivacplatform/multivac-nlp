@@ -87,9 +87,9 @@ object Test_NLP_Libraries {
     val word2Vec = new Word2Vec()
       .setInputCol("filtered")
       .setOutputCol("word2vec")
-      .setVectorSize(100)
+      .setVectorSize(20)
       .setMinCount(10)
-      .setMaxIter(50)
+      .setMaxIter(5)
 
     val pipeline = new Pipeline()
       .setStages(Array(
