@@ -26,8 +26,8 @@ object Test_NLP_Libraries {
     val textColumnName = "text"
 
     val newsDF = df
-      .select("id", textColumnName)
-      .filter("id IS NOT NULL AND text IS NOT NULL")
+      .select(textColumnName)
+      .filter("text IS NOT NULL")
 
 
     newsDF.cache()
