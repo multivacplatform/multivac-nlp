@@ -83,3 +83,4 @@ project/plugins/project/
 metastore_db
 
 resources/application.conf
+src/main/resources/tweets_sample.json
