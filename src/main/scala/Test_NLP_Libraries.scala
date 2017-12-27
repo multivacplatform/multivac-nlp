@@ -23,11 +23,12 @@ object Test_NLP_Libraries {
 
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
 
+    val textColumnName = "text"
+
     val newsDF = df
-      .select("id", "text")
+      .select("id", textColumnName)
       .filter("id IS NOT NULL AND text IS NOT NULL")
 
-    val textColumnName = "text"
 
     newsDF.cache()
 
@@ -115,7 +116,7 @@ object Test_NLP_Libraries {
     pipeLineDF
       .select("normalized", "filtered")
       //.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
-      .show(20, truncate = false)
+      .show(20, truncate = true)
 
     val tokensDF = pipeLineDF
       .select(explode($"tokens_array").as("value")) //tokens without stop words
