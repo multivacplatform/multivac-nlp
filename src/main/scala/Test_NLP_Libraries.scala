@@ -12,15 +12,14 @@ import org.apache.spark.ml.feature.Word2VecModel
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
 
-
-
 object Test_NLP_Libraries {
 
-  def Test_EnWiki(spark: SparkSession): Unit ={
+  def Test_EnWiki(
+                   spark: SparkSession,
+                   inputFile: String
+                 ): Unit ={
 
     import spark.implicits._
-
-    val inputFile="src/main/resources/enwikinews.json"
 
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
 
@@ -65,7 +64,7 @@ object Test_NLP_Libraries {
       .setCleanAnnotations(true)
       .setOutputAsArray(true)
 
-    val stopwords = spark.read.textFile("src/main/resources/stopwords_en.txt").collect()
+    val stopwords = spark.read.textFile("src/main/resources/stop-words/stopwords_en.txt").collect()
     val filteredTokens = new StopWordsRemover()
       .setStopWords(stopwords)
       .setCaseSensitive(false)
@@ -116,7 +115,6 @@ object Test_NLP_Libraries {
       //.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, truncate = false)
 
-
     val tokensDF = pipeLineDF
       .select(explode($"tokens_array").as("value")) //tokens without stop words
       .groupBy("value")
@@ -135,10 +133,11 @@ object Test_NLP_Libraries {
     println("display top 100 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
-//    pipeLineDF.select("word2vec").show(50, truncate = false)
+    //    pipeLineDF.select("word2vec").show(50, truncate = false)
 
     val word2VecModel = model.stages(9).asInstanceOf[Word2VecModel]
     word2VecModel.findSynonyms("london", 4).show(false)
+
 
     spark.close()
   }
