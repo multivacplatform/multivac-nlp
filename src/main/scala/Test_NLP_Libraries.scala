@@ -7,6 +7,7 @@ import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.{StopWordsRemover, Word2Vec}
 import org.apache.spark.ml.linalg.Vector
+import org.apache.spark.ml.feature.Word2VecModel
 
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
@@ -59,7 +60,7 @@ object Test_NLP_Libraries {
       .setOutputCol("pos")
 
     val token_finisher = new Finisher()
-      .setInputCols("stem")
+      .setInputCols("normalized")
       .setOutputCols("tokens_array")
       .setCleanAnnotations(true)
       .setOutputAsArray(true)
@@ -82,10 +83,11 @@ object Test_NLP_Libraries {
 
     //Spark ML
     val word2Vec = new Word2Vec()
-      .setInputCol("tokens_array")
+      .setInputCol("filtered")
       .setOutputCol("word2vec")
-      .setVectorSize(3)
-      .setMinCount(0)
+      .setVectorSize(100)
+      .setMinCount(10)
+      .setMaxIter(50)
 
     val pipeline = new Pipeline()
       .setStages(Array(
@@ -98,13 +100,13 @@ object Test_NLP_Libraries {
         corenlp_pos,
         //posTagger,
         token_finisher,
-        word2Vec,
-        filteredTokens
+        filteredTokens,
+        word2Vec
       ))
 
-    val pipeLineDF = pipeline
-      .fit(newsDF)
-      .transform(newsDF)
+    val model = pipeline.fit(newsDF)
+
+    val pipeLineDF = model.transform(newsDF)
 
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
@@ -133,7 +135,10 @@ object Test_NLP_Libraries {
     println("display top 100 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
-    pipeLineDF.select("word2vec").show(50, truncate = false)
+//    pipeLineDF.select("word2vec").show(50, truncate = false)
+
+    val word2VecModel = model.stages(9).asInstanceOf[Word2VecModel]
+    word2VecModel.findSynonyms("london", 4).show(false)
 
     spark.close()
   }
