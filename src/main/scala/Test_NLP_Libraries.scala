@@ -114,7 +114,7 @@ object Test_NLP_Libraries {
     pipeLineDF.printSchema()
 
     pipeLineDF
-      .select("normalized", "filtered")
+      .select("filtered")
       //.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, truncate = true)
 
@@ -140,6 +140,8 @@ object Test_NLP_Libraries {
 
     val word2VecModel = model.stages(9).asInstanceOf[Word2VecModel]
     word2VecModel.findSynonyms("london", 4).show(false)
+    word2VecModel.findSynonyms("france", 4).show(false)
+    word2VecModel.findSynonyms("monday", 4).show(false)
 
 
     spark.close()
