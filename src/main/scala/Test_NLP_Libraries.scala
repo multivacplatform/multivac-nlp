@@ -27,13 +27,15 @@ object Test_NLP_Libraries {
       .select("id", "text")
       .filter("id IS NOT NULL AND text IS NOT NULL")
 
+    val textColumnName = "text"
+
     newsDF.cache()
 
     println("WikiNews Number of articles: ", newsDF.count())
 
     //spark-nlp functions
     val documentAssembler = new DocumentAssembler()
-      .setInputCol("title")
+      .setInputCol(textColumnName)
       .setOutputCol("document")
 
     val sentenceDetector = new SentenceDetectorModel()
@@ -73,11 +75,11 @@ object Test_NLP_Libraries {
 
     //CoreNLP functions
     val corenlp_tokenizer = new SimpleTokenizer()
-      .setInputCol("title")
+      .setInputCol(textColumnName)
       .setOutputCol("corenlp_tokens")
 
     val corenlp_pos = new SimplePosTagger()
-      .setInputCol("title")
+      .setInputCol(textColumnName)
       .setOutputCol("corenlp_pos")
 
     //Spark ML
@@ -111,7 +113,7 @@ object Test_NLP_Libraries {
     pipeLineDF.printSchema()
 
     pipeLineDF
-      .select("title", "filtered")
+      .select("normalized", "filtered")
       //.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, truncate = false)
 
