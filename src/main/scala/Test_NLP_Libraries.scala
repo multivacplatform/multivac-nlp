@@ -4,6 +4,7 @@ import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
 import com.johnsnowlabs.nlp.annotators.{Normalizer, RegexTokenizer, Stemmer}
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
+
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.{StopWordsRemover, Word2Vec}
 import org.apache.spark.ml.linalg.Vector
@@ -20,9 +21,18 @@ object Test_NLP_Libraries {
                    lang: String
                  ): Unit ={
 
+    var startTime = System.nanoTime()
+    println(s"==========")
+    println(s"Start loading data")
+
     import spark.implicits._
 
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
+
+    var elapsed = (System.nanoTime() - startTime) / 1e9
+    println(s"Finished loading data.")
+    println(s"Time (sec)\t$elapsed")
+    println(s"==========")
 
     val textColumnName = "text"
 
@@ -31,6 +41,7 @@ object Test_NLP_Libraries {
       .filter("text IS NOT NULL")
 
     newsDF.cache()
+
 
     println("WikiNews Number of articles: ", newsDF.count())
 
@@ -109,9 +120,21 @@ object Test_NLP_Libraries {
         word2Vec
       ))
 
+    startTime = System.nanoTime()
+    println(s"==========")
+    println(s"Fit the Pipeline")
+
     val model = pipeline.fit(newsDF)
 
+    println(s"==========")
+    println(s"Transform the Pipeline")
+
     val pipeLineDF = model.transform(newsDF)
+
+    elapsed = (System.nanoTime() - startTime) / 1e9
+    println(s"Finished training and transforming Pipeline")
+    println(s"Time (sec)\t$elapsed")
+    println(s"==========")
 
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
@@ -120,6 +143,7 @@ object Test_NLP_Libraries {
       .select("filtered")
       //.select("token.result", "corenlp_tokens", "pos.result", "corenlp_pos")
       .show(20, truncate = true)
+    //    pipeLineDF.select("word2vec").show(50, truncate = false)
 
     val tokensDF = pipeLineDF
       .select(explode($"tokens_array").as("value")) //tokens without stop words
@@ -144,7 +168,6 @@ object Test_NLP_Libraries {
     println("display top 100 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
-    //    pipeLineDF.select("word2vec").show(50, truncate = false)
 
     val word2VecModel = model.stages.last.asInstanceOf[Word2VecModel]
     if(lang == "en"){
