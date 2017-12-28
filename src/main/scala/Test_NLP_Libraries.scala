@@ -6,6 +6,7 @@ import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.{HashingTF, StopWordsRemover, Word2Vec, Word2VecModel, IDF}
+import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
 
@@ -84,6 +85,12 @@ object Test_NLP_Libraries {
       .setInputCol("tokens_array")
       .setOutputCol("filtered")
 
+    val cvModel = new CountVectorizer()
+      .setInputCol("filtered")
+      .setOutputCol("rawFeatures")
+      .setVocabSize(20)
+      .setMinDF(2)
+
     val hashingTF = new HashingTF()
       .setInputCol("filtered")
       .setOutputCol("rawFeatures")
@@ -123,7 +130,7 @@ object Test_NLP_Libraries {
         posTagger,
         token_finisher,
         filteredTokens,
-        hashingTF,
+        cvModel,
         idf,
         word2Vec
       ))
@@ -147,8 +154,7 @@ object Test_NLP_Libraries {
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
 
-    pipeLineDF
-      .show(40, truncate = true)
+    pipeLineDF.show(40, truncate = true)
 
     //    pipeLineDF.select("word2vec").show(50, truncate = false)
 
