@@ -1,11 +1,11 @@
 import corenlp_simple.{SimplePosTagger, SimpleTokenizer}
+
 import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
 import com.johnsnowlabs.nlp.annotators.{Normalizer, RegexTokenizer, Stemmer}
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
 import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.feature._
-import org.apache.spark.ml.linalg.Vector
+import org.apache.spark.ml.feature.{HashingTF, StopWordsRemover, Word2Vec, Word2VecModel, IDF}
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
 
