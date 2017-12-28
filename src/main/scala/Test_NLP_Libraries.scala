@@ -68,7 +68,10 @@ object Test_NLP_Libraries {
       .setCleanAnnotations(true)
       .setOutputAsArray(true)
 
-    val stopwords = spark.read.textFile("src/main/resources/stop-words/stopwords_en.txt", "src/main/resources/stop-words/stopwords_fr.txt").collect()
+    val stopwords = spark.read.textFile(
+      "src/main/resources/stop-words/stopwords_en.txt",
+      "src/main/resources/stop-words/stopwords_fr.txt").collect()
+
     val filteredTokens = new StopWordsRemover()
       .setStopWords(stopwords)
       .setCaseSensitive(false)
@@ -88,9 +91,9 @@ object Test_NLP_Libraries {
     val word2Vec = new Word2Vec()
       .setInputCol("filtered")
       .setOutputCol("word2vec")
-      .setVectorSize(20)
+      .setVectorSize(100)
       .setMinCount(10)
-      .setMaxIter(5)
+      .setMaxIter(10)
 
     val pipeline = new Pipeline()
       .setStages(Array(
@@ -125,6 +128,8 @@ object Test_NLP_Libraries {
       .count
 
     println("number of unique tokens:", tokensDF.count())
+    println("total number of tokens:")
+    tokensDF.agg(sum("count")).show()
     println("display top 100 tokens:")
     tokensDF.sort($"count".desc).show(20, truncate = false)
 
@@ -134,6 +139,9 @@ object Test_NLP_Libraries {
       .count
 
     println("number of unique tokens after stop words:", filtteredTokensDF.count())
+    println("total number of tokens after stop words:")
+    filtteredTokensDF.agg(sum("count")).show()
+
     println("display top 100 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
@@ -145,8 +153,8 @@ object Test_NLP_Libraries {
       word2VecModel.findSynonyms("france", 4).show(false)
       word2VecModel.findSynonyms("monday", 4).show(false)
     } else if(lang == "fr"){
-      word2VecModel.findSynonyms("paris", 4).show(false)
-      word2VecModel.findSynonyms("emploi", 4).show(false)
+      word2VecModel.findSynonyms("france", 4).show(false)
+      word2VecModel.findSynonyms("politique", 4).show(false)
       word2VecModel.findSynonyms("lundi", 4).show(false)
     }
 
