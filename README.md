@@ -10,7 +10,13 @@ CoreNLP 3.7: [https://github.com/stanfordnlp/CoreNLP]()
 
 ##Functions
 ### Word2Vec
-Training Spark ML Word2Vec by WikiNews (144833 tokes after stop words)
+Training Spark ML Word2Vec:
+
+#### Wiki News
+
+* articles 19750
+* unique tokens: 145349
+* total tokens: 8070537
 
 ```
 findSynonyms: London
@@ -46,9 +52,28 @@ findSynonyms: Monday
 |tuesday  |0.9416679739952087|
 +---------+------------------+
 ```
+#### French Political Tweets
+* tweets: 18716
+* unique tokens: 53268
+* total tokens: 385948
+
+```
+findSynonyms: Lundi
+
++--------+------------------+
+|word    |similarity        |
++--------+------------------+
+|dcembre |0.5641320943832397|
+|mercredi|0.5640853643417358|
+|vendredi|0.5532589554786682|
+|samedi  |0.5358499884605408|
++--------+------------------+
+```
+
 
 
 ## Environment
+
 * Spark 2.2 Local / IntelliJ
 * Spark 2.2 / Cloudera CDH 5.13 / YARN (cluster - client)
 
