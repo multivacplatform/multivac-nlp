@@ -30,7 +30,6 @@ object Test_NLP_Libraries {
       .select(textColumnName)
       .filter("text IS NOT NULL")
 
-
     newsDF.cache()
 
     println("WikiNews Number of articles: ", newsDF.count())
@@ -57,10 +56,10 @@ object Test_NLP_Libraries {
       .setOutputCol("stem")
 
     val posTagger = new PerceptronApproach()
-      .setCorpusPath("src/main/resources/anc-pos-corpus")
       .setNIterations(5)
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
+    //      .setCorpusPath("src/main/resources/anc-pos-corpus")
 
     val token_finisher = new Finisher()
       .setInputCols("normalized")
@@ -93,7 +92,7 @@ object Test_NLP_Libraries {
       .setOutputCol("word2vec")
       .setVectorSize(100)
       .setMinCount(10)
-      .setMaxIter(10)
+      .setMaxIter(5)
 
     val pipeline = new Pipeline()
       .setStages(Array(
@@ -104,7 +103,7 @@ object Test_NLP_Libraries {
         stemmer,
         corenlp_tokenizer,
         corenlp_pos,
-        //posTagger,
+        posTagger,
         token_finisher,
         filteredTokens,
         word2Vec
@@ -147,7 +146,7 @@ object Test_NLP_Libraries {
 
     //    pipeLineDF.select("word2vec").show(50, truncate = false)
 
-    val word2VecModel = model.stages(9).asInstanceOf[Word2VecModel]
+    val word2VecModel = model.stages.last.asInstanceOf[Word2VecModel]
     if(lang == "en"){
       word2VecModel.findSynonyms("london", 4).show(false)
       word2VecModel.findSynonyms("france", 4).show(false)
