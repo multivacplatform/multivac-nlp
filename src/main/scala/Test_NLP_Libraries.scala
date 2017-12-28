@@ -16,7 +16,8 @@ object Test_NLP_Libraries {
 
   def Test_EnWiki(
                    spark: SparkSession,
-                   inputFile: String
+                   inputFile: String,
+                   lang: String
                  ): Unit ={
 
     import spark.implicits._
@@ -67,7 +68,7 @@ object Test_NLP_Libraries {
       .setCleanAnnotations(true)
       .setOutputAsArray(true)
 
-    val stopwords = spark.read.textFile("src/main/resources/stop-words/stopwords_en.txt").collect()
+    val stopwords = spark.read.textFile("src/main/resources/stop-words/stopwords_en.txt", "src/main/resources/stop-words/stopwords_fr.txt").collect()
     val filteredTokens = new StopWordsRemover()
       .setStopWords(stopwords)
       .setCaseSensitive(false)
@@ -139,10 +140,15 @@ object Test_NLP_Libraries {
     //    pipeLineDF.select("word2vec").show(50, truncate = false)
 
     val word2VecModel = model.stages(9).asInstanceOf[Word2VecModel]
-    word2VecModel.findSynonyms("london", 4).show(false)
-    word2VecModel.findSynonyms("france", 4).show(false)
-    word2VecModel.findSynonyms("monday", 4).show(false)
-
+    if(lang == "en"){
+      word2VecModel.findSynonyms("london", 4).show(false)
+      word2VecModel.findSynonyms("france", 4).show(false)
+      word2VecModel.findSynonyms("monday", 4).show(false)
+    } else if(lang == "fr"){
+      word2VecModel.findSynonyms("paris", 4).show(false)
+      word2VecModel.findSynonyms("emploi", 4).show(false)
+      word2VecModel.findSynonyms("lundi", 4).show(false)
+    }
 
     spark.close()
   }
