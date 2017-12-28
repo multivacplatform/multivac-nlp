@@ -6,7 +6,7 @@ object Main {
     val env =args(0)
     val spark = SessionBuilder.buildSession(env)
     // test with Wiki News
-    val wikiNewsJSON="src/main/resources/enwikinews.json"
+    val wikiNewsJSON="src/main/resources/data/enwikinews.json"
 
     // test with Tweet sample
     //    val tweetSampleJSON="src/main/resources/tweets_sample.json"
