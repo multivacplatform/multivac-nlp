@@ -185,7 +185,7 @@ object Test_NLP_Libraries {
 
 
     // Vocabs in CountVectorizerModel
-    val cvModelPipeline = model.stages(8).asInstanceOf[CountVectorizerModel]
+    val cvModelPipeline = model.stages(10).asInstanceOf[CountVectorizerModel]
     val vocabArray = cvModelPipeline.vocabulary
     vocabArray.foreach(println)
 
