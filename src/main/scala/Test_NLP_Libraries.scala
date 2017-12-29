@@ -5,7 +5,8 @@ import com.johnsnowlabs.nlp.annotators.{Normalizer, RegexTokenizer, Stemmer}
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
 import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
 import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.feature.{HashingTF, StopWordsRemover, Word2Vec, Word2VecModel, IDF}
+import org.apache.spark.ml.feature.{StopWordsRemover, Word2Vec, Word2VecModel}
+import org.apache.spark.ml.feature.{HashingTF, IDF, IDFModel}
 import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
@@ -88,8 +89,9 @@ object Test_NLP_Libraries {
     val cvModel = new CountVectorizer()
       .setInputCol("filtered")
       .setOutputCol("rawFeatures")
-      .setVocabSize(20)
+      .setVocabSize(1000)
       .setMinDF(2)
+      .setMinTF(5)
 
     val hashingTF = new HashingTF()
       .setInputCol("filtered")
@@ -182,6 +184,12 @@ object Test_NLP_Libraries {
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
 
+    // Vocabs in CountVectorizerModel
+    val cvModelPipeline = model.stages(8).asInstanceOf[CountVectorizerModel]
+    val vocabArray = cvModelPipeline.vocabulary
+    vocabArray.foreach(println)
+
+    // word2VecModel
     val word2VecModel = model.stages.last.asInstanceOf[Word2VecModel]
     if(lang == "en"){
       word2VecModel.findSynonyms("london", 4).show(false)
