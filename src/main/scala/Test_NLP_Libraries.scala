@@ -40,7 +40,6 @@ object Test_NLP_Libraries {
 
     newsDF.cache()
 
-
     println("WikiNews Number of articles: ", newsDF.count())
 
     //spark-nlp functions
@@ -76,6 +75,18 @@ object Test_NLP_Libraries {
       .setCleanAnnotations(true)
       .setOutputAsArray(true)
 
+    //CoreNLP functions
+
+    val corenlp_tokenizer = new SimpleTokenizer()
+      .setInputCol(textColumnName)
+      .setOutputCol("corenlp_tokens")
+
+    val corenlp_pos = new SimplePosTagger()
+      .setInputCol(textColumnName)
+      .setOutputCol("corenlp_pos")
+
+    //Spark ML
+
     val stopwords = spark.read.textFile(
       "src/main/resources/stop-words/stopwords_en.txt",
       "src/main/resources/stop-words/stopwords_fr.txt").collect()
@@ -102,17 +113,6 @@ object Test_NLP_Libraries {
       .setInputCol("rawFeatures")
       .setOutputCol("features")
 
-
-    //CoreNLP functions
-    val corenlp_tokenizer = new SimpleTokenizer()
-      .setInputCol(textColumnName)
-      .setOutputCol("corenlp_tokens")
-
-    val corenlp_pos = new SimplePosTagger()
-      .setInputCol(textColumnName)
-      .setOutputCol("corenlp_pos")
-
-    //Spark ML
     val word2Vec = new Word2Vec()
       .setInputCol("filtered")
       .setOutputCol("word2vec")
@@ -187,7 +187,7 @@ object Test_NLP_Libraries {
     // Vocabs in CountVectorizerModel
     val cvModelPipeline = model.stages(10).asInstanceOf[CountVectorizerModel]
     val vocabArray = cvModelPipeline.vocabulary
-//    vocabArray.foreach(println)
+    //    vocabArray.foreach(println)
 
     // word2VecModel
     val word2VecModel = model.stages.last.asInstanceOf[Word2VecModel]
