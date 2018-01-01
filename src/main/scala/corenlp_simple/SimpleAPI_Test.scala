@@ -7,15 +7,9 @@ import edu.stanford.nlp.simple._
 
 object SimpleAPI_Test {
 
-  def test(): Unit ={
+  def testEnglish(): Unit ={
 
     var wordsWithPosLabels: String = ""
-    var frenchWordsWithPosLabels: String = ""
-
-    val props = new Properties()
-    props.setProperty("tokenize.language", "fr")
-    props.setProperty("language", "french")
-    props.setProperty("pos.model", "edu/stanford/nlp/models/pos-tagger/french/french.tagger")
 
     val document =
       """
@@ -24,8 +18,6 @@ object SimpleAPI_Test {
         Ordinarily, the development of combative techniques is intertwined with the tools used to execute those techniques.
         In a rapidly changing world, those tools are constantly changing, requiring that the techniques to use them be continuously reinvented. The history of Japan is somewhat unusual in its relative isolation. Compared with the rest of the world, the Japanese tools of war evolved slowly. Many people believe that this afforded the warrior class the opportunity to study their weapons with greater depth than other cultures. Nevertheless, the teaching and training of these martial arts did evolve. For example, in the early medieval period, the bow and the spear were emphasized, but during the Tokugawa period, fewer large scale battles took place, and the sword became the most prestigious weapon. Another trend that developed throughout Japanese history was that of increasing martial specialization as society became more stratified over time.
       """.stripMargin
-
-    val frenchDocument = "Au fond, les choses sont assez simples."
 
     val wordsArray = new Sentence(document)
       .words()
@@ -39,6 +31,26 @@ object SimpleAPI_Test {
       .zipWithIndex
       .map{case (k,v) => (v,k)}
 
+    for (e <- postArray){
+      wordsWithPosLabels +=  wordsArray.find(_._1 == e._1).get._2 + "_" + e._2 + " "
+    }
+
+    println("tokens: ", wordsArray)
+    println("pos tags: ", postArray)
+    println("words with pos labels: ", wordsWithPosLabels)
+
+  }
+
+  def testFrench(): Unit ={
+
+    var frenchWordsWithPosLabels: String = ""
+
+    val props = new Properties()
+    props.setProperty("tokenize.language", "fr")
+    props.setProperty("language", "french")
+    props.setProperty("pos.model", "edu/stanford/nlp/models/pos-tagger/french/french.tagger")
+
+    val frenchDocument = "Au fond, les choses sont assez simples."
 
     val wordsArrayFrench = new Sentence(frenchDocument)
       .words()
@@ -52,20 +64,11 @@ object SimpleAPI_Test {
       .zipWithIndex
       .map{case (k,v) => (v,k)}
 
-    for (e <- postArray){
-      wordsWithPosLabels +=  wordsArray.find(_._1 == e._1).get._2 + "_" + e._2 + " "
-    }
-
     for (e <- postArrayFrench){
       frenchWordsWithPosLabels +=  wordsArrayFrench.find(_._1 == e._1).get._2 + "_" + e._2 + " "
     }
 
-    println("tokens: ", wordsArray)
-    println("pos tags: ", postArray)
-    println("words with pos labels: ", wordsWithPosLabels)
-
     println("french pos tags: ", frenchWordsWithPosLabels)
-
 
   }
 }
