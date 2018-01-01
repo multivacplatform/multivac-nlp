@@ -167,7 +167,7 @@ object Test_NLP_Libraries {
     println("number of unique tokens:", tokensDF.count())
     println("total number of tokens:")
     tokensDF.agg(sum("count")).show()
-    println("display top 100 tokens:")
+    println("display top 20 tokens:")
     tokensDF.sort($"count".desc).show(20, truncate = false)
 
     val filtteredTokensDF = pipeLineDF
@@ -179,7 +179,7 @@ object Test_NLP_Libraries {
     println("total number of tokens after stop words:")
     filtteredTokensDF.agg(sum("count")).show()
 
-    println("display top 100 filtered tokens:")
+    println("display top 20 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
 
@@ -352,7 +352,7 @@ object Test_NLP_Libraries {
     println("number of unique tokens:", tokensDF.count())
     println("total number of tokens:")
     tokensDF.agg(sum("count")).show()
-    println("display top 100 tokens:")
+    println("display top 20 tokens:")
     tokensDF.sort($"count".desc).show(20, truncate = false)
 
     val filtteredTokensDF = pipeLineDF
@@ -364,9 +364,8 @@ object Test_NLP_Libraries {
     println("total number of tokens after stop words:")
     filtteredTokensDF.agg(sum("count")).show()
 
-    println("display top 100 filtered tokens:")
+    println("display top 20 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
-
 
     // Vocabs in CountVectorizerModel
     val cvModelPipeline = model.stages(9).asInstanceOf[CountVectorizerModel]
@@ -376,7 +375,7 @@ object Test_NLP_Libraries {
     // word2VecModel
     val word2VecModel = model.stages.last.asInstanceOf[Word2VecModel]
 
-    word2VecModel.findSynonyms("france", 4).show(false)
+    word2VecModel.findSynonyms("paris", 4).show(false)
     word2VecModel.findSynonyms("politique", 4).show(false)
     word2VecModel.findSynonyms("lundi", 4).show(false)
 
