@@ -50,7 +50,10 @@ object SimpleAPI_Test {
     props.setProperty("language", "french")
     props.setProperty("pos.model", "edu/stanford/nlp/models/pos-tagger/french/french.tagger")
 
-    val frenchDocument = "Au fond, les choses sont assez simples."
+    val frenchDocument =
+      """
+        L’allocation de Dirichlet latente (de l'anglais Latent Dirichlet Allocation) ou LDA est un modèle génératif probabiliste permettant d'expliquer des ensembles d'observations, par le moyen de groupes non observés, eux-mêmes définis par des similarités de données.
+      """.stripMargin
 
     val wordsArrayFrench = new Sentence(frenchDocument)
       .words()
