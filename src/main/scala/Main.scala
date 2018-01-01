@@ -9,15 +9,20 @@ object Main {
     val wikiNewsJSON="src/main/resources/data/enwikinews.json"
 
     // test with Tweet sample
-    // val tweetSampleJSON="src/main/resources/data/tweets_sample.json"
+     val tweetSampleJSON="src/main/resources/data/tweets_sample.json"
 
     SimpleAPI_Test.testEnglish()
     SimpleAPI_Test.testFrench()
 
-//    Test_NLP_Libraries.Test_EnWiki(
+//    Test_NLP_Libraries.Test_English(
 //      spark,
-//      wikiNewsJSON,
-//      "en"
+//      wikiNewsJSON
 //    )
+
+    Test_NLP_Libraries.Test_French(
+      spark,
+      tweetSampleJSON
+    )
+
   }
 }
