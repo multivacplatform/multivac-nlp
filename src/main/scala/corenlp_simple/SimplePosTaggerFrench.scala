@@ -4,9 +4,9 @@ import org.apache.spark.ml.UnaryTransformer
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.types.{ArrayType, DataType, StringType}
 
-class FrenchSimplePosTagger(override val uid: String) extends UnaryTransformer[String, Seq[String], FrenchSimplePosTagger]  {
+class SimplePosTaggerFrench(override val uid: String) extends UnaryTransformer[String, Seq[String], SimplePosTaggerFrench]  {
 
-  def this() = this(Identifiable.randomUID("SimplePosTagger"))
+  def this() = this(Identifiable.randomUID("SimplePosTaggerFrench"))
 
   override protected def createTransformFunc: String => Seq[String] = {
     SimpleAPI_Functions.getPOSFrench _
