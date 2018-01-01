@@ -118,7 +118,7 @@ object Test_NLP_Libraries {
       .setOutputCol("word2vec")
       .setVectorSize(100)
       .setMinCount(10)
-      .setMaxIter(5)
+      .setMaxIter(20)
 
     val pipeline = new Pipeline()
       .setStages(Array(
@@ -156,9 +156,9 @@ object Test_NLP_Libraries {
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
 
-    pipeLineDF.show(40, truncate = true)
+//    pipeLineDF.show(40, truncate = true)
 
-    //    pipeLineDF.select("word2vec").show(50, truncate = false)
+    pipeLineDF.select("text", "corenlp_pos").show(50, truncate = false)
 
     val tokensDF = pipeLineDF
       .select(explode($"tokens_array").as("value")) //tokens without stop words
