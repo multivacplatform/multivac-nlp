@@ -35,5 +35,6 @@ libraryDependencies ++= Seq(
   "com.johnsnowlabs.nlp" %% "spark-nlp" % "1.2.4",
   "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0",
   "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0" classifier "models",
+  "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0" classifier "models-french",
   "com.optimaize.languagedetector" % "language-detector" % "0.6"
 )
