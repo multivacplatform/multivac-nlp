@@ -8,7 +8,6 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-
 resolvers ++= Seq(
   "JBoss Repository" at "http://repository.jboss.org/nexus/content/repositories/releases/",
   "Spray Repository" at "http://repo.spray.cc/",

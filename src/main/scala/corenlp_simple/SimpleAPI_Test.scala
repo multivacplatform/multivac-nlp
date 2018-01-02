@@ -55,7 +55,7 @@ object SimpleAPI_Test {
         L’allocation de Dirichlet latente (de l'anglais Latent Dirichlet Allocation) ou LDA est un modèle génératif probabiliste permettant d'expliquer des ensembles d'observations, par le moyen de groupes non observés, eux-mêmes définis par des similarités de données.
       """.stripMargin
 
-    val wordsArrayFrench = new Sentence(frenchDocument)
+    val wordsArrayFrench = new Sentence(frenchDocument, props)
       .words()
       .asScala
       .zipWithIndex
@@ -67,6 +67,14 @@ object SimpleAPI_Test {
       .zipWithIndex
       .map{case (k,v) => (v,k)}
 
+    println("tokens: ", wordsArrayFrench)
+    println("pos tags: ", postArrayFrench)
+
+    val parseArrayFrench = new Sentence(frenchDocument, props)
+      .parse(props)
+
+    println("parsed document: ", parseArrayFrench)
+
     for (e <- postArrayFrench){
       frenchWordsWithPosLabels +=  wordsArrayFrench.find(_._1 == e._1).get._2 + "_" + e._2 + " "
     }
@@ -75,3 +83,42 @@ object SimpleAPI_Test {
 
   }
 }
+/*
+static {
+    //See http://www.lattice.cnrs.fr/sites/itellier/SEM.html
+    MAPPING.put("A", "ADJ"); //adjective
+    MAPPING.put("ADJ", "ADJ");
+    MAPPING.put("ADJWH", "ADJ"); //Interrogative adjective
+    MAPPING.put("ADV", "ADV"); //adverb
+    MAPPING.put("ADVWH", "ADV"); //Interrogative adverb
+    MAPPING.put("C", "CONJ"); //conjunction and subordinating conjunction
+    MAPPING.put("CC", "CONJ"); //conjunction and subordinating conjunction
+    MAPPING.put("CL", "PRON"); //weak clitic pronoun TODO: ADP?
+    MAPPING.put("CLO", "PRON"); //subject clitic pronoun TODO
+    MAPPING.put("CLR", "PRON"); //reflexive clitic pronoun TODO
+    MAPPING.put("CLS", "PRON"); //object clitic pronoun TODO
+    MAPPING.put("CS", "SCONJ"); //subordinating conjunction
+    MAPPING.put("D", "DET"); //determiner
+    MAPPING.put("DET", "DET"); //determiner
+    MAPPING.put("DETWH", "DET"); //interrogative determiner
+    MAPPING.put("ET", "X"); //foreign word
+    MAPPING.put("I", "INTJ"); //interjection
+    MAPPING.put("N", "NOUN"); //noun
+    MAPPING.put("NC", "NOUN"); //noun
+    MAPPING.put("NP", "PROPN"); //proper noun
+    MAPPING.put("NPP", "PROPN"); //pfoper noun
+    MAPPING.put("P", "ADP"); // preposition
+    MAPPING.put("PREF", "PART" ); //prefix
+    MAPPING.put("PRO", "PRON"); //strong pronoun
+    MAPPING.put("PROREL", "PRON"); //relative pronoun
+    MAPPING.put("PROWH", "PRON"); //interrogative pronoun
+    MAPPING.put("V", "VERB"); // verb
+    MAPPING.put("VINF", "NOUN"); //infinitive verb TODO: good tag?
+    MAPPING.put("VIMP", "VERB"); //imperative verb
+    MAPPING.put("VPP", "ADJ"); //past participle verb TODO: good tag?
+    MAPPING.put("VPR", "VERB"); //present participle verb TODO: good tag?
+    MAPPING.put("VS", "VERB"); //subjonctive verb
+    MAPPING.put("PUNC", "PUNCT"); // punctuation
+    MAPPING.put(".$$.", "PUNCT");
+  }
+*/
