@@ -56,13 +56,15 @@ object SimpleAPI_Test {
         Avec cette opération, Disney met la main sur la bibliothèque de contenu de son rival, ainsi que son réseau de distribution international, la télévision et obtient plus de contrôle sur Hulu, la plate-forme de vidéos à la demande détenue par ABC, FOX, NBC et Time Warner.
       """.stripMargin
 
-    val wordsArrayFrench = new Sentence(frenchDocument, props)
+    val frenchDocWithoutAccent = frenchDocument.replaceAll("[^\\p{ASCII}]", "")
+
+    val wordsArrayFrench = new Sentence(frenchDocWithoutAccent, props)
       .words()
       .asScala
       .zipWithIndex
       .map{case (k,v) => (v,k)}
 
-    val postArrayFrench = new Sentence(frenchDocument, props)
+    val postArrayFrench = new Sentence(frenchDocWithoutAccent, props)
       .posTags(props)
       .asScala
       .zipWithIndex
@@ -123,3 +125,7 @@ static {
     MAPPING.put(".$$.", "PUNCT");
   }
 */
+/*
+* french grammar regex ex:
+* (?:\\w+_NP[P] )+\\w+_(?:NP[CP] )|(?:\\w+_N? )|(?:\\w+_NP[P]? )|(?:\\w+_N[C]? )
+* */
