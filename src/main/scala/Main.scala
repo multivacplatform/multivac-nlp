@@ -18,11 +18,11 @@ object Main {
 //      spark,
 //      wikiNewsJSON
 //    )
-
+/*
     Test_NLP_Libraries.Test_French(
       spark,
       tweetSampleJSON
-    )
+    )*/
 
   }
 }
