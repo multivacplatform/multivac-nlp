@@ -52,7 +52,8 @@ object SimpleAPI_Test {
 
     val frenchDocument =
       """
-        L’allocation de Dirichlet latente (de l'anglais Latent Dirichlet Allocation) ou LDA est un modèle génératif probabiliste permettant d'expliquer des ensembles d'observations, par le moyen de groupes non observés, eux-mêmes définis par des similarités de données.
+        La Walt Disney Company a annoncé l'acquisition des actifs de films et de télévision du 21st Century Fox dans une transaction évaluée à 66,1 milliards de dollars décomposée en 52,4 milliards d'actions et une dette nette de 13,7 milliards.
+        Avec cette opération, Disney met la main sur la bibliothèque de contenu de son rival, ainsi que son réseau de distribution international, la télévision et obtient plus de contrôle sur Hulu, la plate-forme de vidéos à la demande détenue par ABC, FOX, NBC et Time Warner.
       """.stripMargin
 
     val wordsArrayFrench = new Sentence(frenchDocument, props)
