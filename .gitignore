@@ -84,3 +84,4 @@ metastore_db
 
 resources/application.conf
 src/main/resources/data/tweets_sample.json
+src/main/resources/data/enwikinews.json
