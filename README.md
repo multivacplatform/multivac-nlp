@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/multivacplatform/multivac-nlp.svg?branch=master)](https://travis-ci.org/multivacplatform/multivac-nlp)
+
 # multivac-nlp
 Testing and benchmarking some of the existing NLP libraries in Apache Spark
 
