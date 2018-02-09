@@ -14,10 +14,10 @@ object Main {
     SimpleAPI_Test.testEnglish()
     SimpleAPI_Test.testFrench()
 
-//    Test_NLP_Libraries.Test_English(
-//      spark,
-//      wikiNewsJSON
-//    )
+    Test_NLP_Libraries.Test_English(
+      spark,
+      wikiNewsJSON
+    )
 /*
     Test_NLP_Libraries.Test_French(
       spark,
