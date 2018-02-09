@@ -1,12 +1,10 @@
 import corenlp_simple.{SimplePosTagger, SimplePosTaggerFrench, SimpleTokenizer}
 import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
-import com.johnsnowlabs.nlp.annotators.{Normalizer, RegexTokenizer, Stemmer}
+import com.johnsnowlabs.nlp.annotators.{Normalizer, Tokenizer, Stemmer}
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
-import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
+import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.{SentenceDetector}
 import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.feature.{StopWordsRemover, Word2Vec, Word2VecModel}
-import org.apache.spark.ml.feature.{HashingTF, IDF, IDFModel}
-import org.apache.spark.ml.feature.{CountVectorizer, CountVectorizerModel}
+import org.apache.spark.ml.feature._
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
 
@@ -45,11 +43,11 @@ object Test_NLP_Libraries {
       .setInputCol(textColumnName)
       .setOutputCol("document")
 
-    val sentenceDetector = new SentenceDetectorModel()
+    val sentenceDetector = new SentenceDetector()
       .setInputCols(Array("document"))
       .setOutputCol("sentence")
 
-    val regexTokenizer = new RegexTokenizer()
+    val regexTokenizer = new Tokenizer()
       .setInputCols(Array("sentence"))
       .setOutputCol("token")
 
@@ -230,11 +228,11 @@ object Test_NLP_Libraries {
       .setInputCol(textColumnName)
       .setOutputCol("document")
 
-    val sentenceDetector = new SentenceDetectorModel()
+    val sentenceDetector = new SentenceDetector()
       .setInputCols(Array("document"))
       .setOutputCol("sentence")
 
-    val regexTokenizer = new RegexTokenizer()
+    val regexTokenizer = new Tokenizer()
       .setInputCols(Array("sentence"))
       .setOutputCol("token")
 

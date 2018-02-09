@@ -3,7 +3,7 @@ package sparknlp
 import com.johnsnowlabs.nlp._
 import com.johnsnowlabs.nlp.annotators._
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
-import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetectorModel
+import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetector
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.StopWordsRemover
 import org.apache.spark.sql.SparkSession
@@ -25,11 +25,11 @@ object Spark_NLP_Test {
       .setInputCol("title")
       .setOutputCol("document")
 
-    val sentenceDetector = new SentenceDetectorModel()
+    val sentenceDetector = new SentenceDetector()
       .setInputCols(Array("document"))
       .setOutputCol("sentence")
 
-    val regexTokenizer = new RegexTokenizer()
+    val regexTokenizer = new Tokenizer()
       .setInputCols(Array("sentence"))
       .setOutputCol("token")
 
