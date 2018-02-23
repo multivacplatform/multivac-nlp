@@ -49,7 +49,6 @@ object Spark_NLP_Test {
       .setOutputCol("stem")
 
     val posTagger = new PerceptronApproach()
-      .setCorpusPath("src/main/resources/anc-pos-corpus")
       .setNIterations(20)
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
