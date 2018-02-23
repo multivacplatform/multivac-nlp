@@ -14,7 +14,7 @@ object Spark_NLP_Test {
 
     println("Spark Version", spark.version)
 
-    val inputFile="src/main/resources/enwikinews.json"
+    val inputFile="data/enwikinews.json"
 
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
 
