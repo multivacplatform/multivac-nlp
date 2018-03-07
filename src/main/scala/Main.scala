@@ -11,8 +11,8 @@ object Main {
     // test with Tweet sample
      val tweetSampleJSON="data/tweets_sample.json"
 
-    SimpleAPI_Test.testEnglish()
-    SimpleAPI_Test.testFrench()
+//    SimpleAPI_Test.testEnglish()
+//    SimpleAPI_Test.testFrench()
 
     Test_NLP_Libraries.Test_English(
       spark,

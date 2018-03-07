@@ -2,7 +2,7 @@ import corenlp_simple.{SimplePosTagger, SimplePosTaggerFrench, SimpleTokenizer}
 import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
 import com.johnsnowlabs.nlp.annotators.{Normalizer, Tokenizer, Stemmer}
 import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
-import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.{SentenceDetector}
+import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.SentenceDetector
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature._
 import org.apache.spark.sql.{Row, SparkSession}
@@ -80,7 +80,7 @@ object Test_NLP_Libraries {
 
     val corenlp_pos = new SimplePosTagger()
       .setInputCol(textColumnName)
-      .setOutputCol("pos")
+      .setOutputCol("corenlp_pos")
 
     //Spark ML
 
@@ -155,13 +155,13 @@ object Test_NLP_Libraries {
 
     //    pipeLineDF.show(40, truncate = true)
 
-    pipeLineDF.select("text", "corenlp_pos").show(50, truncate = false)
+    pipeLineDF.select("text", "corenlp_pos").show(50, truncate = true)
 
     val tokensDF = pipeLineDF
       .select(explode($"tokens_array").as("value")) //tokens without stop words
       .groupBy("value")
       .count
-
+    tokensDF.count()
     println("number of unique tokens:", tokensDF.count())
     println("total number of tokens:")
     tokensDF.agg(sum("count")).show()
@@ -180,9 +180,9 @@ object Test_NLP_Libraries {
     println("display top 20 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
 
-
     // Vocabs in CountVectorizerModel
     val cvModelPipeline = model.stages(9).asInstanceOf[CountVectorizerModel]
+
     val vocabArray = cvModelPipeline.vocabulary
     //    vocabArray.foreach(println)
 
