@@ -64,12 +64,10 @@ object Test_NLP_Libraries {
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
 
-    //      .setCorpusPath("src/main/resources/anc-pos-corpus")
-
     val token_finisher = new Finisher()
       .setInputCols("normalized")
       .setOutputCols("tokens_array")
-      .setCleanAnnotations(true)
+      .setCleanAnnotations(false)
       .setOutputAsArray(true)
 
     //CoreNLP functions
@@ -149,6 +147,8 @@ object Test_NLP_Libraries {
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
     pipeLineDF.show()
+    pipeLineDF.select("pos.result").show(20)
+
     val tokensDF = pipeLineDF
       .select(explode($"tokens_array").as("value")) //tokens without stop words
       .groupBy("value")
@@ -171,7 +171,6 @@ object Test_NLP_Libraries {
 
     println("display top 20 filtered tokens:")
     filtteredTokensDF.sort($"count".desc).show(20, truncate = false)
-
 
     // Vocabs in CountVectorizerModel
     //    val cvModelPipeline = model.stages(9).asInstanceOf[CountVectorizerModel]
