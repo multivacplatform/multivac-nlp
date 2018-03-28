@@ -28,11 +28,11 @@ object Test_NLP_Libraries {
     println(s"Time (sec)\t$elapsed")
     println(s"==========")
 
-    val textColumnName = "text"
+    val textColumnName = "title"
 
     val newsDF = df
       .select(textColumnName)
-      .filter("text IS NOT NULL")
+      .filter("title IS NOT NULL")
 
     newsDF.cache()
 
@@ -147,7 +147,7 @@ object Test_NLP_Libraries {
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
     pipeLineDF.show()
-    pipeLineDF.select("pos.result").show(20)
+    pipeLineDF.select(textColumnName, "pos.result").show(20)
 
     val tokensDF = pipeLineDF
       .select(explode($"tokens_array").as("value")) //tokens without stop words
