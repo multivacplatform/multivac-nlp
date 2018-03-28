@@ -19,7 +19,7 @@ object Spark_NLP_Test {
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
 
     val newsDF = df.select("id", "title").filter("id IS NOT NULL AND title IS NOT NULL")
-    newsDF.show(10)
+    newsDF.show(10, false)
 
     val documentAssembler = new DocumentAssembler()
       .setInputCol("title")
@@ -33,7 +33,7 @@ object Spark_NLP_Test {
       .setInputCols(Array("sentence"))
       .setOutputCol("token")
 
-    val stopwords = spark.read.textFile("src/main/resources/stopwords_en.txt").collect()
+    val stopwords = spark.read.textFile("src/main/resources/stop-words/stopwords_en.txt").collect()
     val filteredTokens = new StopWordsRemover()
       .setStopWords(stopwords)
       .setCaseSensitive(false)
@@ -49,7 +49,7 @@ object Spark_NLP_Test {
       .setOutputCol("stem")
 
     val posTagger = new PerceptronApproach()
-      .setNIterations(20)
+      .setNIterations(5)
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
 
@@ -62,8 +62,8 @@ object Spark_NLP_Test {
         documentAssembler,
         sentenceDetector,
         regexTokenizer,
-        normalizer,
-        stemmer,
+//        normalizer,
+//        stemmer,
         posTagger,
         finisher
       ))
