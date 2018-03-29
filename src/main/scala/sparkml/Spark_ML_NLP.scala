@@ -28,11 +28,11 @@ object Spark_ML_NLP {
     println(s"Time (sec)\t$elapsed")
     println(s"==========")
 
-    val textColumnName = "title"
+    val textColumnName = "text"
 
     val newsDF = df
       .select(textColumnName)
-      .filter("title IS NOT NULL")
+      .filter("text IS NOT NULL")
 
     newsDF.cache()
 
@@ -68,23 +68,30 @@ object Spark_ML_NLP {
 
     val ngramsCols = Array("filtered", "bigram", "trigram")
 
-//    val assembler = new VectorAssembler()
-//      .setInputCols(ngramsCols)
-//      .setOutputCol("tokens")
+    //    val assembler = new VectorAssembler()
+    //      .setInputCols(ngramsCols)
+    //      .setOutputCol("tokens")
 
     val hashingTF = new HashingTF()
       .setInputCol("filtered")
-      .setOutputCol("rawFeatures")
-      .setNumFeatures(20)
+      .setOutputCol("hashingTF")
+      .setNumFeatures(20000)
 
     val idf = new IDF()
-      .setInputCol("rawFeatures")
+      .setInputCol("hashingTF")
+      .setOutputCol("idf")
+
+    val normalizer = new Normalizer()
+      .setInputCol("idf")
       .setOutputCol("features")
 
     // Trains a k-means model.
     val kmeans = new KMeans()
-      .setK(20)
-      .setSeed(1L)
+      .setFeaturesCol("features")
+      .setPredictionCol("prediction")
+      .setK(100)
+      .setMaxIter(50)
+      .setSeed(0) // fpr reproducability
 
     val pipeline = new Pipeline()
       .setStages(Array(
@@ -92,9 +99,10 @@ object Spark_ML_NLP {
         filteredTokens,
         bigram,
         trigram,
-//        assembler,
         hashingTF,
-        idf
+        idf,
+        normalizer,
+        kmeans
         //        cvModel,
         //        idf,
         //        word2Vec
@@ -120,19 +128,27 @@ object Spark_ML_NLP {
     pipeLineDF.printSchema()
     pipeLineDF.show(20)
 
+    pipeLineDF.groupBy($"prediction").count.show(100)
 
-    val result = pipeLineDF.withColumn("combined", array($"bigram", $"trigram"))
-    result.select("combined").show(false)
+    val categories = pipeLineDF
+      .select(textColumnName, "prediction")
+      .filter($"prediction" === 11)
+
+    categories.show(20, false)
+    //    val result = pipeLineDF.withColumn("combined", array($"bigram", $"trigram"))
+    //    result.select("combined").show(false)
 
 
     //    val tokensDF = pipeLineDF
-//      .select(explode($"tokens").as("value")) //tokens without stop words
-//      .groupBy("value")
-//      .count
-//      .orderBy($"count".desc)
-//
-//    tokensDF.count()
-//    tokensDF.show(50)
+    //      .select(
+    //        explode($"tokens").as("value")
+    //      ) //tokens without stop words
+    //      .groupBy("value")
+    //      .count
+    //      .orderBy($"count".desc)
+
+    //    tokensDF.count()
+    //    tokensDF.show(50)
 
   }
 }
