@@ -26,13 +26,13 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %%"spark-core" % "2.2.0",
-  "org.apache.spark" %% "spark-sql" % "2.2.0",
-  "org.apache.spark" %% "spark-streaming" % "2.2.0",
-  "org.apache.spark" %% "spark-mllib" % "2.2.0",
-  "org.apache.spark" %% "spark-hive" % "2.2.0",
-  "org.apache.spark" %% "spark-graphx" % "2.2.0",
-  "org.apache.spark" %% "spark-yarn" % "2.2.0",
+  "org.apache.spark" %%"spark-core" % "2.2.1",
+  "org.apache.spark" %% "spark-sql" % "2.2.1",
+  "org.apache.spark" %% "spark-streaming" % "2.2.1",
+  "org.apache.spark" %% "spark-mllib" % "2.2.1",
+  "org.apache.spark" %% "spark-hive" % "2.2.1",
+  "org.apache.spark" %% "spark-graphx" % "2.2.1",
+  "org.apache.spark" %% "spark-yarn" % "2.2.1",
   "com.typesafe" % "config" % "1.3.1",
   "com.johnsnowlabs.nlp" %% "spark-nlp" % "1.5.0",
   "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0",
