@@ -1,10 +1,15 @@
+
 import corenlp_simple.{SimplePosTagger, SimplePosTaggerFrench, SimpleTokenizer}
 import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
-import com.johnsnowlabs.nlp.annotators.{Normalizer, Tokenizer, Stemmer}
-import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
-import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.{SentenceDetector}
+import com.johnsnowlabs.nlp.annotators.{Normalizer, Stemmer, Tokenizer}
+
+//import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
+//import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.{SentenceDetector}
 import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.feature._
+import org.apache.spark.ml.feature.{StopWordsRemover, IDF, HashingTF, CountVectorizer, Word2Vec}
+
+import com.johnsnowlabs.nlp.annotator._
+
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
 
@@ -63,6 +68,7 @@ object Test_NLP_Libraries {
       .setNIterations(5)
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
+      .setCorpus("src/main/resources/anc-pos-corpus", delimiter = " ")
 
     val token_finisher = new Finisher()
       .setInputCols("normalized")
@@ -130,19 +136,17 @@ object Test_NLP_Libraries {
 
     startTime = System.nanoTime()
     println(s"==========")
-    println(s"Fit the Pipeline")
+    println(s"Fit and Transform the Pipeline")
 
     val model = pipeline.fit(newsDF)
 
-    println(s"==========")
-    println(s"Transform the Pipeline")
-
     val pipeLineDF = model.transform(newsDF)
-
     elapsed = (System.nanoTime() - startTime) / 1e9
     println(s"Finished training and transforming Pipeline")
     println(s"Time (sec)\t$elapsed")
     println(s"==========")
+
+
 
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
