@@ -12,9 +12,12 @@ object SessionBuilder {
       .appName("multivac-nlp")
       .master(sparkMaster)
       .enableHiveSupport()
+      .config("spark.driver.memory", "4G")
+      .config("spark.kryoserializer.buffer.max","200M")
+      .config("spark.serializer","org.apache.spark.serializer.KryoSerializer")
       .getOrCreate
 
-    spark.sparkContext.setLogLevel("WARN")
+    spark.sparkContext.setLogLevel("INFO")
 
     spark
   }
