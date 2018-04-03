@@ -64,14 +64,14 @@ object Test_NLP_Libraries {
       .setInputCols(Array("normalized"))
       .setOutputCol("stem")
 
-//    val posTagger = new PerceptronApproach()
-//      .setNIterations(5)
-//      .setInputCols(Array("sentence", "token"))
-//      .setOutputCol("pos")
-//      .setCorpus("src/main/resources/anc-pos-corpus", delimiter = " ")
+    val posTagger = new PerceptronApproach()
+      .setNIterations(5)
+      .setInputCols(Array("sentence", "token"))
+      .setOutputCol("pos")
+      .setCorpus("src/main/resources/anc-pos-corpus/110CYL067.txt", delimiter = "|")
 
     // use pre-trained Pos Tagger
-    val posTagger = PerceptronModel.pretrained()
+    //    val posTagger = PerceptronModel.pretrained()
 
     val token_finisher = new Finisher()
       .setInputCols("normalized")
