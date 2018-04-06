@@ -66,46 +66,12 @@ object Spark_ML_NLP {
       .setInputCol("filtered")
       .setOutputCol("trigram")
 
-    val ngramsCols = Array("filtered", "bigram", "trigram")
-
-    //    val assembler = new VectorAssembler()
-    //      .setInputCols(ngramsCols)
-    //      .setOutputCol("tokens")
-
-    val hashingTF = new HashingTF()
-      .setInputCol("filtered")
-      .setOutputCol("hashingTF")
-      .setNumFeatures(20000)
-
-    val idf = new IDF()
-      .setInputCol("hashingTF")
-      .setOutputCol("idf")
-
-    val normalizer = new Normalizer()
-      .setInputCol("idf")
-      .setOutputCol("features")
-
-    // Trains a k-means model.
-    val kmeans = new KMeans()
-      .setFeaturesCol("features")
-      .setPredictionCol("prediction")
-      .setK(100)
-      .setMaxIter(50)
-      .setSeed(0) // fpr reproducability
-
     val pipeline = new Pipeline()
       .setStages(Array(
         regexTokenizer,
         filteredTokens,
         bigram,
-        trigram,
-        hashingTF,
-        idf,
-        normalizer,
-        kmeans
-        //        cvModel,
-        //        idf,
-        //        word2Vec
+        trigram
       ))
 
     startTime = System.nanoTime()
@@ -128,13 +94,79 @@ object Spark_ML_NLP {
     pipeLineDF.printSchema()
     pipeLineDF.show(20)
 
-    pipeLineDF.groupBy($"prediction").count.show(100)
 
-    val categories = pipeLineDF
-      .select(textColumnName, "prediction")
-      .filter($"prediction" === 11)
+    val mergeColumnsArray = udf((a: Seq[String], b: Seq[String]) => a++b)
+    val mergedNGramDF = pipeLineDF.withColumn("ngrams",mergeColumnsArray(pipeLineDF("bigram"),pipeLineDF("trigram"))).select(textColumnName, "ngrams")
 
-    categories.show(20, false)
+    val hashingTF = new HashingTF()
+      .setInputCol("ngrams")
+      .setOutputCol("hashingTF")
+      .setNumFeatures(5000)
+
+    val idf = new IDF()
+      .setInputCol("hashingTF")
+      .setOutputCol("idf")
+
+    val normalizer = new Normalizer()
+      .setInputCol("idf")
+      .setOutputCol("features")
+
+    // Trains a k-means model.
+    val kmeans = new KMeans()
+      .setFeaturesCol("features")
+      .setPredictionCol("prediction")
+      .setK(50)
+      .setMaxIter(100)
+      .setSeed(0) // fpr reproducability
+
+    val pipeline2 = new Pipeline()
+      .setStages(Array(
+        hashingTF,
+        idf,
+        normalizer,
+        kmeans
+        //        cvModel,
+        //        idf,
+        //        word2Vec
+      ))
+
+    startTime = System.nanoTime()
+    println(s"==========")
+    println(s"Fit the Pipeline")
+
+    val model2 = pipeline2.fit(mergedNGramDF)
+
+    println(s"==========")
+    println(s"Transform the Pipeline")
+
+    val pipeLineDF2 = model2.transform(mergedNGramDF)
+
+    elapsed = (System.nanoTime() - startTime) / 1e9
+    println(s"Finished training and transforming Pipeline")
+    println(s"Time (sec)\t$elapsed")
+    println(s"==========")
+
+    println("peipeline DataFrame Schema: ")
+    pipeLineDF2.printSchema()
+    pipeLineDF2.show(20)
+
+    pipeLineDF2.groupBy($"prediction")
+      .count
+      .orderBy($"count".desc)
+      .show(100)
+
+    val categories = pipeLineDF2
+      .select(textColumnName, "ngrams", "prediction")
+      .filter($"prediction" === 13)
+
+    categories.select(
+      explode($"ngrams").as("value")
+    )
+      .groupBy("value")
+      .count
+      .orderBy($"count".desc)
+      .show(100, false)
+
     //    val result = pipeLineDF.withColumn("combined", array($"bigram", $"trigram"))
     //    result.select("combined").show(false)
 
