@@ -22,18 +22,9 @@ object Test_NLP_Libraries {
                     inputFile: String
                   ): Unit = {
 
-    var startTime = System.nanoTime()
-    println(s"==========")
-    println(s"Start loading data")
-
     import spark.implicits._
 
     val df = spark.read.format("json").option("mode", "DROPMALFORMED").load(inputFile)
-
-    var elapsed = (System.nanoTime() - startTime) / 1e9
-    println(s"Finished loading data.")
-    println(s"Time (sec)\t$elapsed")
-    println(s"==========")
 
     val textColumnName = "title"
 
@@ -150,17 +141,11 @@ object Test_NLP_Libraries {
         //        word2Vec
       ))
 
-    startTime = System.nanoTime()
-    println(s"==========")
-    println(s"Fit and Transform the Pipeline")
-
-    val model = pipeline.fit(newsDF)
+    val model = Benchmark.time("Time to train model") {
+      pipeline.fit(newsDF)
+    }
 
     val pipeLineDF = model.transform(newsDF)
-    elapsed = (System.nanoTime() - startTime) / 1e9
-    println(s"Finished training and transforming Pipeline")
-    println(s"Time (sec)\t$elapsed")
-    println(s"==========")
 
     Benchmark.time("Time to convert and show") {pipeLineDF.show()}
     println("peipeline DataFrame Schema: ")
