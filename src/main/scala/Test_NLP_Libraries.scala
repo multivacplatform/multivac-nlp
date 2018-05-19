@@ -2,13 +2,15 @@
 import corenlp_simple.{SimplePosTagger, SimplePosTaggerFrench, SimpleTokenizer}
 import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
 import com.johnsnowlabs.nlp.annotators.{Normalizer, Stemmer, Tokenizer}
+import com.johnsnowlabs.nlp.annotator._
+import com.johnsnowlabs.nlp.base._
+import com.johnsnowlabs.util.Benchmark
+import org.apache.spark.ml.feature.NGram
 
 //import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
 //import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.{SentenceDetector}
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.{StopWordsRemover, IDF, HashingTF, CountVectorizer, Word2Vec}
-
-import com.johnsnowlabs.nlp.annotator._
 
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.functions._
@@ -99,6 +101,15 @@ object Test_NLP_Libraries {
       .setInputCol("tokens_array")
       .setOutputCol("filtered")
 
+    val ngram = new NGram()
+      .setN(3)
+      .setInputCol("tokens_array")
+      .setOutputCol("3-gram")
+
+    val gramAssembler = new DocumentAssembler()
+      .setInputCol("3-gram")
+      .setOutputCol("3-grams")
+
     val cvModel = new CountVectorizer()
       .setInputCol("filtered")
       .setOutputCol("rawFeatures")
@@ -131,7 +142,9 @@ object Test_NLP_Libraries {
         stemmer,
         posTagger,
         token_finisher,
-        filteredTokens
+        filteredTokens,
+        ngram,
+        gramAssembler
         //        cvModel,
         //        idf,
         //        word2Vec
@@ -149,11 +162,11 @@ object Test_NLP_Libraries {
     println(s"Time (sec)\t$elapsed")
     println(s"==========")
 
-
-
+    Benchmark.time("Time to convert and show") {pipeLineDF.show()}
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
-    pipeLineDF.show()
+
+    pipeLineDF.select(textColumnName, "3-gram", "3-grams").show(20)
     pipeLineDF.select(textColumnName, "pos.result").show(20)
 
     val tokensDF = pipeLineDF
