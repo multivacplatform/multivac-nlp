@@ -59,7 +59,7 @@ object Test_NLP_Libraries {
 
     val posOptions = Map("format" -> "text")
     val posTagger = new PerceptronApproach()
-      .setNIterations(5)
+      .setNIterations(1)
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
       .setCorpus(path = "src/main/resources/masc_tagged/data/*", delimiter = "_", readAs = "SPARK_DATASET", options = posOptions)
@@ -148,6 +148,7 @@ object Test_NLP_Libraries {
 
     val pipeLineDF = model.transform(newsDF)
 
+    /*
     Benchmark.time("Time to convert and show") {pipeLineDF.show()}
     println("peipeline DataFrame Schema: ")
     pipeLineDF.printSchema()
@@ -188,6 +189,8 @@ object Test_NLP_Libraries {
     //    word2VecModel.findSynonyms("london", 4).show(false)
     //    word2VecModel.findSynonyms("france", 4).show(false)
     //    word2VecModel.findSynonyms("monday", 4).show(false)
+*/
+    pipeLineDF.withColumn("test", GrammerExtraction.posPhrases($"pos.result", $"tokens_array")).show
 
     spark.close()
   }
