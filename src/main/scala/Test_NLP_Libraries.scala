@@ -62,7 +62,7 @@ object Test_NLP_Libraries {
       .setNIterations(5)
       .setInputCols(Array("sentence", "token"))
       .setOutputCol("pos")
-      .setCorpus(path = "src/main/resources/masc_tagged/data", delimiter = "_", readAs = "SPARK_DATASET", options = posOptions)
+      .setCorpus(path = "src/main/resources/masc_tagged/data/*", delimiter = "_", readAs = "SPARK_DATASET", options = posOptions)
 
     //     use pre-trained Pos Tagger
     //    val posTagger = PerceptronModel.pretrained()
