@@ -57,19 +57,25 @@ object Test_NLP_Libraries {
       .setInputCols(Array("normalized"))
       .setOutputCol("stem")
 
-    val posOptions = Map("format" -> "text")
-    val posTagger = new PerceptronApproach()
-      .setNIterations(1)
-      .setInputCols(Array("sentence", "token"))
-      .setOutputCol("pos")
-      .setCorpus(path = "src/main/resources/masc_tagged/data/*", delimiter = "_", readAs = "SPARK_DATASET", options = posOptions)
-
-    //     use pre-trained Pos Tagger
-    //    val posTagger = PerceptronModel.pretrained()
-
     val token_finisher = new Finisher()
       .setInputCols("normalized")
       .setOutputCols("tokens_array")
+      .setCleanAnnotations(false)
+      .setOutputAsArray(true)
+
+    val posOptions = Map("format" -> "text")
+    val posTagger = new PerceptronApproach()
+      .setNIterations(5)
+      .setInputCols(Array("sentence", "normalized"))
+      .setOutputCol("pos")
+      .setCorpus(path = "src/main/resources/anc-pos-corpus/110CYL067.txt", delimiter = "|")
+    //      .setCorpus(path = "src/main/resources/masc_tagged/data/spoken", delimiter = "_", readAs = "SPARK_DATASET", options = posOptions)
+    //     use pre-trained Pos Tagger
+    //    val posTagger = PerceptronModel.pretrained()
+
+    val token_finisher_pos = new Finisher()
+      .setInputCols("pos")
+      .setOutputCols("pos_array")
       .setCleanAnnotations(false)
       .setOutputAsArray(true)
 
@@ -132,8 +138,9 @@ object Test_NLP_Libraries {
         token,
         normalizer,
         stemmer,
-        posTagger,
         token_finisher,
+        posTagger,
+        token_finisher_pos,
         filteredTokens,
         ngram,
         gramAssembler
@@ -190,7 +197,17 @@ object Test_NLP_Libraries {
     //    word2VecModel.findSynonyms("france", 4).show(false)
     //    word2VecModel.findSynonyms("monday", 4).show(false)
 */
-    pipeLineDF.withColumn("test", GrammerExtraction.posPhrases($"pos.result", $"tokens_array")).show
+    val phrasesDF = pipeLineDF.withColumn("phrases_array", GrammerExtraction.posPhrases($"pos.result", $"tokens_array"))
+
+    val tokensDF = phrasesDF
+      .select(explode($"phrases_array").as("value"))
+      .where(size(col("phrases_array")) > 0)
+      .groupBy("value")
+      .count
+      .orderBy($"count".desc)
+
+    tokensDF.printSchema()
+    tokensDF.show()
 
     spark.close()
   }
