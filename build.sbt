@@ -27,7 +27,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= {
-  val sparkVer = "2.3.0"
+  val sparkVer = "2.3.1"
   Seq(
     "org.apache.spark" %%"spark-core" % sparkVer exclude("com.google.guava", "guava"),
     "org.apache.spark" %% "spark-sql" % sparkVer,
@@ -37,7 +37,7 @@ libraryDependencies ++= {
     "org.apache.spark" %% "spark-graphx" % sparkVer,
     "org.apache.spark" %% "spark-yarn" % sparkVer,
     "com.typesafe" % "config" % "1.3.1",
-    "com.johnsnowlabs.nlp" %% "spark-nlp" % "1.5.4" exclude("com.google.guava", "guava"),
+    "com.johnsnowlabs.nlp" %% "spark-nlp" % "1.6.0" exclude("com.google.guava", "guava"),
     "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0" classifier "models",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0" classifier "models-french",
