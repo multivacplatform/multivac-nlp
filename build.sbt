@@ -27,7 +27,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= {
-  val sparkVer = "2.3.1"
+  val sparkVer = "2.3.0"
   Seq(
     "org.apache.spark" %%"spark-core" % sparkVer exclude("com.google.guava", "guava"),
     "org.apache.spark" %% "spark-sql" % sparkVer,
