@@ -76,7 +76,7 @@ object Test_NLP_Libraries {
     val chunker = new Chunker()
       .setInputCols(Array("pos"))
       .setOutputCol("chunk")
-      .setRegexParsers(Array("<DT>?<JJ>*<NN>"))
+      .setRegexParsers(Array("<DT|PP\\$>?<JJ>*<NN>"))
 //      .setRegexParsers(Array("<DT>?<JJ>*<NN>", "<DT|PP\\$>?<JJ>*<NN>"))
 
     val token_finisher_pos = new Finisher()
