@@ -63,15 +63,21 @@ object Test_NLP_Libraries {
       .setCleanAnnotations(false)
       .setOutputAsArray(true)
 
-    val posOptions = Map("format" -> "text")
+    val posOptions = Map("format" -> "text", "repartition" -> "1")
     val posTagger = new PerceptronApproach()
       .setNIterations(5)
       .setInputCols(Array("sentence", "normalized"))
       .setOutputCol("pos")
-      .setCorpus(path = "src/main/resources/anc-pos-corpus/110CYL067.txt", delimiter = "|")
+      .setCorpus(path = "src/main/resources/anc-pos-corpus/110CYL067.txt", delimiter = "|", options = posOptions)
     //      .setCorpus(path = "src/main/resources/masc_tagged/data/spoken", delimiter = "_", readAs = "SPARK_DATASET", options = posOptions)
     //     use pre-trained Pos Tagger
     //    val posTagger = PerceptronModel.pretrained()
+
+    val chunker = new Chunker()
+      .setInputCols(Array("pos"))
+      .setOutputCol("chunk")
+      .setRegexParsers(Array("<DT>?<JJ>*<NN>"))
+//      .setRegexParsers(Array("<DT>?<JJ>*<NN>", "<DT|PP\\$>?<JJ>*<NN>"))
 
     val token_finisher_pos = new Finisher()
       .setInputCols("pos")
@@ -140,6 +146,7 @@ object Test_NLP_Libraries {
         stemmer,
         token_finisher,
         posTagger,
+        chunker,
         token_finisher_pos,
         filteredTokens,
         ngram,
@@ -208,6 +215,17 @@ object Test_NLP_Libraries {
 
     tokensDF.printSchema()
     tokensDF.show()
+
+    //    pipeLineDF.select($"chunk.result").where(size(col("chunk.result")) > 0).show()
+    val chunkerDF = pipeLineDF
+      .select(explode($"chunk.result").as("value"))
+      .where(size(col("chunk.result")) > 0)
+      .groupBy("value")
+      .count
+      .orderBy($"count".desc)
+
+    chunkerDF.count
+    chunkerDF.show(100, false)
 
     spark.close()
   }
