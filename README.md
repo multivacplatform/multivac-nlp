@@ -1,6 +1,5 @@
-[![Build Status](https://travis-ci.org/multivacplatform/multivac-nlp.svg?branch=master)](https://travis-ci.org/multivacplatform/multivac-nlp)
+# multivac-nlp [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/multivacplatform/es-punchcard/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/multivacplatform/multivac-nlp.svg?branch=master)](https://travis-ci.org/multivacplatform/multivac-nlp)
 
-# multivac-nlp
 Testing and benchmarking some of the existing NLP libraries in Apache Spark
 
 ## NLP libraries used in Multivac-NLP
