@@ -1,4 +1,4 @@
-# multivac-nlp [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/multivacplatform/es-punchcard/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/multivacplatform/multivac-nlp.svg?branch=master)](https://travis-ci.org/multivacplatform/multivac-nlp)
+# multivac-nlp [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/multivacplatform/es-punchcard/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/multivacplatform/multivac-nlp.svg?branch=master)](https://travis-ci.org/multivacplatform/multivac-nlp) [![multivac discuss](https://img.shields.io/badge/multivac-discuss-ff69b4.svg)](https://discourse.iscpif.fr/c/multivac) [![multivac channel](https://img.shields.io/badge/multivac-chat-ff69b4.svg)](https://chat.iscpif.fr/channel/multivac)
 
 Testing and benchmarking some of the existing NLP libraries in Apache Spark
 
