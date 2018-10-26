@@ -37,7 +37,7 @@ libraryDependencies ++= {
     "org.apache.spark" %% "spark-graphx" % sparkVer % "provided" withSources(),
     "org.apache.spark" %% "spark-yarn" % sparkVer % "provided" withSources(),
     "com.typesafe" % "config" % "1.3.1",
-    "com.johnsnowlabs.nlp" %% "spark-nlp" % "1.6.0" exclude("com.google.guava", "guava"),
+    "com.johnsnowlabs.nlp" %% "spark-nlp" % "1.7.2" exclude("com.google.guava", "guava"),
     "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0" classifier "models",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.7.0" classifier "models-french",
