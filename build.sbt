@@ -42,7 +42,8 @@ libraryDependencies ++= {
     "edu.stanford.nlp" % "stanford-corenlp" % corenlpVer,
     "edu.stanford.nlp" % "stanford-corenlp" % corenlpVer classifier "models",
     "edu.stanford.nlp" % "stanford-corenlp" % corenlpVer classifier "models-french",
-    "com.optimaize.languagedetector" % "language-detector" % "0.6"
+    "com.optimaize.languagedetector" % "language-detector" % "0.6",
+    "com.spotify" % "docker-client" % "3.5.13"
   )
 }
 
