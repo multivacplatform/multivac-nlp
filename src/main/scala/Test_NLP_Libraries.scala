@@ -228,7 +228,5 @@ object Test_NLP_Libraries {
 
     chunkerDF.count
     chunkerDF.show(100, false)
-
-    spark.close()
   }
 }

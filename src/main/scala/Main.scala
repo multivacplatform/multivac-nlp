@@ -18,5 +18,6 @@ object Main {
     Test_NLP_Libraries.Test_English(spark, wikiNewsJSON)
     Spark_ML_NLP.Test_English(spark, wikiNewsJSON)
 
+    spark.close()
   }
 }
