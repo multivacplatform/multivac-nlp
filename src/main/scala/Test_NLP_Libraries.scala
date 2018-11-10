@@ -3,12 +3,9 @@ import corenlp_simple.{SimplePosTagger, SimplePosTaggerFrench, SimpleTokenizer}
 import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
 import com.johnsnowlabs.nlp.annotators.{Normalizer, Stemmer, Tokenizer}
 import com.johnsnowlabs.nlp.annotator._
-import com.johnsnowlabs.nlp.base._
 import com.johnsnowlabs.util.Benchmark
 import org.apache.spark.ml.feature.NGram
 
-//import com.johnsnowlabs.nlp.annotators.pos.perceptron.PerceptronApproach
-//import com.johnsnowlabs.nlp.annotators.sbd.pragmatic.{SentenceDetector}
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature.{StopWordsRemover, IDF, HashingTF, CountVectorizer, Word2Vec}
 
@@ -17,6 +14,11 @@ import org.apache.spark.sql.functions._
 
 object Test_NLP_Libraries {
 
+  /**
+    * Testing English documents by spark-nlp
+    * @param spark is SparkSession type
+    * @param inputFile is the path to the JSON Line by Line format
+    */
   def Test_English(
                     spark: SparkSession,
                     inputFile: String
@@ -77,7 +79,7 @@ object Test_NLP_Libraries {
       .setInputCols(Array("pos"))
       .setOutputCol("chunk")
       .setRegexParsers(Array("<DT|PP\\$>?<JJ>*<NN>"))
-//      .setRegexParsers(Array("<DT>?<JJ>*<NN>", "<DT|PP\\$>?<JJ>*<NN>"))
+    //      .setRegexParsers(Array("<DT>?<JJ>*<NN>", "<DT|PP\\$>?<JJ>*<NN>"))
 
     val token_finisher_pos = new Finisher()
       .setInputCols("pos")
