@@ -10,6 +10,11 @@ import org.apache.spark.sql.functions._
 
 object Spark_ML_NLP {
 
+  /**
+    * Test Spark ML for text mining and NLP for English documents
+    * @param spark is a shared SparkSession
+    * @param inputFile is the path to the JSON Line by Line format
+    */
   def Test_English(
                     spark: SparkSession,
                     inputFile: String
@@ -48,7 +53,6 @@ object Spark_ML_NLP {
       .setOutputCol("words")
       .setToLowercase(true)
       .setPattern("\\W") // alternatively .setPattern("\\w+").setGaps(false)
-
 
     val filteredTokens = new StopWordsRemover()
       .setStopWords(stopwords)
