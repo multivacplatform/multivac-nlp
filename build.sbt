@@ -9,6 +9,11 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
+//enablePlugins(JavaAppPackaging) 
+enablePlugins(JavaServerAppPackaging)
+enablePlugins(JavaAppPackaging)
+
 //resolvers ++= Seq(
 //  "JBoss Repository" at "http://repository.jboss.org/nexus/content/repositories/releases/",
 //  "Spray Repository" at "http://repo.spray.cc/",
@@ -42,7 +47,8 @@ libraryDependencies ++= {
     "edu.stanford.nlp" % "stanford-corenlp" % corenlpVer,
     "edu.stanford.nlp" % "stanford-corenlp" % corenlpVer classifier "models",
     "edu.stanford.nlp" % "stanford-corenlp" % corenlpVer classifier "models-french",
-    "com.optimaize.languagedetector" % "language-detector" % "0.6"
+    "com.optimaize.languagedetector" % "language-detector" % "0.6",
+    "com.spotify" % "docker-client" % "3.5.13"
   )
 }
 
