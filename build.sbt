@@ -12,6 +12,7 @@ licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 //enablePlugins(JavaAppPackaging) 
 enablePlugins(JavaServerAppPackaging)
+enablePlugins(JavaAppPackaging)
 
 //resolvers ++= Seq(
 //  "JBoss Repository" at "http://repository.jboss.org/nexus/content/repositories/releases/",
