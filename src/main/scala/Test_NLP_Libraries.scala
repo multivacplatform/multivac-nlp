@@ -16,7 +16,7 @@ object Test_NLP_Libraries {
 
   /**
     * Testing English documents by spark-nlp
-    * @param spark is SparkSession type
+    * @param spark is a shared SparkSession
     * @param inputFile is the path to the JSON Line by Line format
     */
   def Test_English(
