@@ -1,16 +1,14 @@
+package org.multivacplatform
 
-import corenlp_simple.{SimplePosTagger, SimplePosTaggerFrench, SimpleTokenizer}
-import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
+import com.johnsnowlabs.nlp.annotator.{Chunker, PerceptronApproach, SentenceDetector}
 import com.johnsnowlabs.nlp.annotators.{Normalizer, Stemmer, Tokenizer}
-import com.johnsnowlabs.nlp.annotator._
+import com.johnsnowlabs.nlp.{DocumentAssembler, Finisher}
 import com.johnsnowlabs.util.Benchmark
-import org.apache.spark.ml.feature.NGram
-
+import org.multivacplatform.corenlp_simple.{SimplePosTagger, SimpleTokenizer}
 import org.apache.spark.ml.Pipeline
-import org.apache.spark.ml.feature.{StopWordsRemover, IDF, HashingTF, CountVectorizer, Word2Vec}
-
-import org.apache.spark.sql.{Row, SparkSession}
-import org.apache.spark.sql.functions._
+import org.apache.spark.ml.feature._
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.{col, explode, size}
 
 object Test_NLP_Libraries {
 

@@ -1,4 +1,4 @@
-package sparkml
+package org.multivacplatform.sparkml
 
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature._

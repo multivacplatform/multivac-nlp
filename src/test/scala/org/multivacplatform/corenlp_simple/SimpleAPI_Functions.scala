@@ -1,4 +1,4 @@
-package corenlp_simple
+package org.multivacplatform.corenlp_simple
 
 import scala.collection.JavaConverters._
 import java.util.Properties

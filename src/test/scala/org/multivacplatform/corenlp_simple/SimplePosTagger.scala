@@ -1,4 +1,4 @@
-package corenlp_simple
+package org.multivacplatform.corenlp_simple
 
 import org.apache.spark.ml.UnaryTransformer
 import org.apache.spark.ml.util.Identifiable

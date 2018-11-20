@@ -1,9 +1,8 @@
+package org.multivacplatform
+
 import org.apache.spark.sql.functions.udf
-import java.util.Properties
-import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
-import scala.collection.immutable
+
+import scala.collection.mutable.ArrayBuffer
 
 object GrammerExtraction  extends Serializable {
   def posPhrases = udf((posArray: Seq[String], tokenArray: Seq[String]) => {

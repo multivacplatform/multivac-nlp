@@ -1,4 +1,4 @@
-package sparknlp
+package org.multivacplatform.sparknlp
 
 import com.johnsnowlabs.nlp._
 import com.johnsnowlabs.nlp.annotators._

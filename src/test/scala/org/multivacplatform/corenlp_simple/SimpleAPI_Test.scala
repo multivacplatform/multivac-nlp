@@ -1,4 +1,4 @@
-package corenlp_simple
+package org.multivacplatform.corenlp_simple
 
 import java.util.Properties
 

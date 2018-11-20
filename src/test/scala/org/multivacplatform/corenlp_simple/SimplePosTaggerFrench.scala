@@ -1,17 +1,15 @@
-package corenlp_simple
+package org.multivacplatform.corenlp_simple
 
 import org.apache.spark.ml.UnaryTransformer
 import org.apache.spark.ml.util.Identifiable
 import org.apache.spark.sql.types.{ArrayType, DataType, StringType}
 
-class SimpleTokenizer(override val uid: String)
-  extends UnaryTransformer[String, Seq[String], SimpleTokenizer]  {
+class SimplePosTaggerFrench(override val uid: String) extends UnaryTransformer[String, Seq[String], SimplePosTaggerFrench]  {
 
-  def this() = this(Identifiable.randomUID("SimpleTokenizer"))
+  def this() = this(Identifiable.randomUID("SimplePosTaggerFrench"))
 
   override protected def createTransformFunc: String => Seq[String] = {
-    SimpleAPI_Functions.getWords _
-
+    SimpleAPI_Functions.getPOSFrench _
   }
 
   override protected def validateInputType(inputType: DataType): Unit = {
